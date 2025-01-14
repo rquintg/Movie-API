@@ -1,10 +1,24 @@
+import {useEffect, useState} from "react";
 import {useMovieContext} from "../contexts/MovieContext.jsx";
+import {getMovieTrailers} from "../services/api.js";
 
 import '../css/MovieCard.css'
+
 
 function MovieCard({movie}){
     const {addFavorites, removeFromFavorites, isFavorite} = useMovieContext();
     const favorite = isFavorite(movie.id);
+    const [trailer, setTrailer] = useState(null);
+    const [showTrailer, setShowTrailer] = useState(false);
+
+    useEffect(() => {
+        async function fetchTrailer() {
+            const trailerData = await getMovieTrailers(movie.id);
+            setTrailer(trailerData);
+        }
+
+        fetchTrailer();
+    }, [movie.id]);
 
     function onFavoriteClick(e){
         e.preventDefault();
@@ -18,6 +32,9 @@ function MovieCard({movie}){
         }
         return overview;
     }
+
+    function onWatchTrailerClick() { setShowTrailer(true); }
+    function onCloseTrailerClick() { setShowTrailer(false); }
 
     return(
         <div className="movie-card">
@@ -36,7 +53,22 @@ function MovieCard({movie}){
             <div className="movie-info">
                 <p>{truncateOverview(movie.overview, 150)}</p>
                 <p>Release date: <b>{movie.release_date?.split("-")[0]}</b></p>
+                {trailer && trailer.key && (
+                    <button className="watch-trailer-btn" onClick={onWatchTrailerClick}> Watch Trailer </button>
+                )}
             </div>
+                {showTrailer && (
+                    <div className="trailer-modal">
+                        <div className="trailer-content">
+                            <button className="close-trailer-btn" onClick={onCloseTrailerClick}>✖</button>
+                            <iframe width="auto" height="315" src={`https://www.youtube.com/embed/${trailer.key}`}
+                                    title="YouTube video player" frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen></iframe>
+                        </div>
+                    </div>
+                )}
+
         </div>
     )
 }
