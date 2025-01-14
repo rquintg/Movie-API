@@ -89,15 +89,30 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 0.5rem;
 }
 
-.movie-info h3 {
+.movie-info p {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.movie-info-header{
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.movie-info-header h3 {
     font-size: 1rem;
     margin: 0;
 }
 
-.movie-info p {
+.movie-info-header p {
     color: #999;
     font-size: 0.9rem;
 }
@@ -114,6 +129,10 @@
     }
 
     .movie-info {
+        padding: 0.75rem;
+    }
+
+    .movie-info-header {
         padding: 0.75rem;
     }
 
