@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useMovieContext} from "../contexts/MovieContext.jsx";
-import {getMovieTrailers} from "../services/api.js";
+import {getMovieTrailers, getGenres} from "../services/api.js";
 
 import '../css/MovieCard.css'
 
@@ -9,6 +9,7 @@ function MovieCard({movie}){
     const {addFavorites, removeFromFavorites, isFavorite} = useMovieContext();
     const favorite = isFavorite(movie.id);
     const [trailer, setTrailer] = useState(null);
+    const [genres, setGenres] = useState([]);
     const [showTrailer, setShowTrailer] = useState(false);
 
     useEffect(() => {
@@ -17,7 +18,13 @@ function MovieCard({movie}){
             setTrailer(trailerData);
         }
 
+        async function fetchGenres() {
+            const genresData = await getGenres();
+            setGenres(genresData)
+        }
+
         fetchTrailer();
+        fetchGenres();
     }, [movie.id]);
 
     function onFavoriteClick(e){
@@ -36,6 +43,13 @@ function MovieCard({movie}){
     function onWatchTrailerClick() { setShowTrailer(true); }
     function onCloseTrailerClick() { setShowTrailer(false); }
 
+    function getGenreNames(genreIds) {
+        return genreIds.map(id => {
+            const genre = genres.find(g => g.id === id);
+            return genre ? genre.name : null;
+        }).filter(name => name).join(', ');
+    }
+
     return(
         <div className="movie-card">
             <div className="movie-poster">
@@ -53,6 +67,9 @@ function MovieCard({movie}){
             <div className="movie-info">
                 <p>{truncateOverview(movie.overview, 150)}</p>
                 <p>Release date: <b>{movie.release_date?.split("-")[0]}</b></p>
+                {genres && genres.length > 0 && (
+                    <p>Genres: {getGenreNames(movie.genre_ids)}</p> )
+                }
                 {trailer && trailer.key && (
                     <button className="watch-trailer-btn" onClick={onWatchTrailerClick}> Watch Trailer </button>
                 )}

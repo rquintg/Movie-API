@@ -16,3 +16,9 @@ export const getMovieTrailers = async (movieId) => {
     const data = await response.json();
     return data.results.find(video => video.type === "Trailer" && video.site === "YouTube");
 }
+
+export const getGenres = async () => {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/genre/movie/list?api_key=${import.meta.env.VITE_API_KEY}`);
+    const data = await response.json();
+    return data.genres;
+}
