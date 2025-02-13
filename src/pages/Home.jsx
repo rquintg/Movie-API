@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {getPopularMovies, searchMovies} from "../services/api.js";
+import {getPopularMovies, searchMovies, getMovieTrailers} from "../services/api.js";
 import MovieCard from "../components/MovieCard.jsx";
 
 import '../css/Home.css'
@@ -10,6 +10,9 @@ function Home (){
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [trailer, setTrailer] = useState(null);
+    const [showTrailer, setShowTrailer] = useState(false);
+
 
     useEffect(() => {
         const loadPopularMovies = async () => {
@@ -48,6 +51,22 @@ function Home (){
         }
     }
 
+    const handleWatchTrailer = async (movieId) => {
+        try {
+            const trailerData = await getMovieTrailers(movieId);
+            setTrailer(trailerData);
+            setShowTrailer(true);
+        } catch (error) {
+            console.error(error);
+            setError("Error loading trailer");
+        }
+    }
+
+    const handleCloseTrailer = () => {
+        setShowTrailer(false);
+        setTrailer(null);
+    };
+
     return (
         <div className="home">
 
@@ -68,9 +87,32 @@ function Home (){
                 <div className="movies-grid">
                     {movies.map((movie) =>
                         (
-                            <MovieCard key={movie.id} movie={movie}/>
+                            <MovieCard
+                                key={movie.id}
+                                movie={movie}
+                                onWatchTrailer={() => handleWatchTrailer(movie.id)}
+                            />
                         )
                     )}
+                </div>
+            )}
+
+            {showTrailer && trailer && (
+                <div className="trailer-modal">
+                    <div className="trailer-content">
+                        <button className="close-trailer-btn" onClick={handleCloseTrailer}>
+                            <i className="bi bi-x-circle"></i>
+                        </button>
+                        <iframe
+                            width="560"
+                            height="315"
+                            src={`https://www.youtube.com/embed/${trailer.key}`}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
                 </div>
             )}
 
