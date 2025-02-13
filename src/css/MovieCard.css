@@ -67,12 +67,12 @@
 }
 
 .favorite-btn:hover {
-    color: #ff4757;
+    color: #ffd700;
     background-color: rgba(0, 0, 0, 0.8);
 }
 
 .favorite-btn.active {
-    color: #ff4757;
+    color: #ffd700;
 }
 
 .rating-select {
@@ -150,10 +150,41 @@
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s;
+
 }
 
 .watch-trailer-btn:hover {
     background-color: #0056b3;
 }
 
+.modal-content{
+    border: #1a1a1a solid 1px;
+}
+.modal-poster {
+    text-align: center;
+    padding-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.modal-poster img {
+    width: 60%;
+    height: auto;
+    border: #1a1a1a solid 2px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    sc
+}
