@@ -1,8 +1,10 @@
 import {useState, useEffect} from "react";
 import {getPopularMovies, searchMovies, getMovieTrailers} from "../services/api.js";
 import MovieCard from "../components/MovieCard.jsx";
+import ModalMovieCard from "../components/ModalMovieCard.jsx";
 
 import '../css/Home.css'
+
 
 function Home (){
 
@@ -12,6 +14,8 @@ function Home (){
     const [loading, setLoading] = useState(true);
     const [trailer, setTrailer] = useState(null);
     const [showTrailer, setShowTrailer] = useState(false);
+    const [selectedMovie, setSelectedMovie] = useState(null);
+    const [showModalInfo, setShowModalInfo] = useState(false);
 
 
     useEffect(() => {
@@ -67,6 +71,16 @@ function Home (){
         setTrailer(null);
     };
 
+    const handleShowModalInfo = (movieId) => {
+        setSelectedMovie(movieId);
+        setShowModalInfo(true);
+    }
+
+    const handleCloseModalInfo = () => {
+        setShowModalInfo(false);
+        setSelectedMovie(null);
+    }
+
     return (
         <div className="home">
 
@@ -90,7 +104,7 @@ function Home (){
                             <MovieCard
                                 key={movie.id}
                                 movie={movie}
-                                onWatchTrailer={() => handleWatchTrailer(movie.id)}
+                                onShowModalInfo={() => handleShowModalInfo(movie)}
                             />
                         )
                     )}
@@ -114,6 +128,13 @@ function Home (){
                         ></iframe>
                     </div>
                 </div>
+            )}
+
+            {showModalInfo && selectedMovie && (
+               <ModalMovieCard movie={selectedMovie}
+                               onWatchTrailer={() => handleWatchTrailer(selectedMovie.id)}
+                               onCloseModal={handleCloseModalInfo}
+               />
             )}
 
         </div>
