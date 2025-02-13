@@ -33,7 +33,7 @@ function MovieCard({movie, onShowModalInfo}){
             </div>
             <div className="movie-info-header">
                 <h3>{movie.title}</h3>
-                <p className="rating-select">Rating: {movie.vote_average.toFixed(1)}</p>
+                <p className="rating-select">Rating: {movie.vote_average > 0 ? movie.vote_average.toFixed(1) : "n/a"}</p>
             </div>
             <div className="movie-info">
                 <p>{truncateOverview(movie.overview, 100)}</p>
