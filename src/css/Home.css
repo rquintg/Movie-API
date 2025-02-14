@@ -80,7 +80,8 @@
 
 .trailer-content {
     position: relative;
-    background-color: #646cff;
+    background-color: #061733;
+    border: #084298 1px solid;
     padding: 0.9rem;
     border-radius: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
