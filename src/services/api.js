@@ -28,3 +28,8 @@ export const getMovieCredits = async (movieId) => {
     const data = await response.json();
     return data.cast;
 }
+
+export const getMovieDetails = async (movieId) => {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/movie/${movieId}?api_key=${import.meta.env.VITE_API_KEY}`);
+    return await response.json();
+}
