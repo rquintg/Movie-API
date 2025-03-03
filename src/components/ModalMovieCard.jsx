@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getGenres} from "../services/api.js";
+import {getGenres, getMovieCredits} from "../services/api.js";
 
 import '../css/MovieCard.css';
 
@@ -7,6 +7,7 @@ import '../css/MovieCard.css';
 function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
 
     const [genres, setGenres] = useState([]);
+    const [credits, setCredits] = useState([]);
 
     useEffect(() => {
         async function fetchGenres() {
@@ -14,7 +15,13 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
             setGenres(genresData)
         }
 
+        async function fetchCredits() {
+            const creditsData = await getMovieCredits(movie.id);
+            setCredits(creditsData);
+        }
+
         fetchGenres();
+        fetchCredits();
     }, [movie.id]);
 
     function getGenreNames(genreIds) {
@@ -24,12 +31,22 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
         }).filter(name => name).join(', ');
     }
 
+    function getActorNames(credits) {
+        return credits.slice(0,3).map((actor, index) => (
+            <div key={index}>
+                {actor.name} AS  <span className="character-name"> {actor.character}</span>
+            </div>
+        ));
+    }
+
+
+
     return (
         <div className="modal fade show modal-overlay" >
-            <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="">
-                        <h5 className="modal-title  movie-info-header">
+                        <h5 className="movie-info-header">
                             {movie.title}
                             <p className="rating-select">Rating: {movie.vote_average.toFixed(1)}</p>
                         </h5>
@@ -39,10 +56,16 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
                         <div className=" modal-poster">
                             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title}/>
                         </div>
-                        <p>{movie.overview}</p>
-                        <p>Release Date: {movie.release_date}</p>
+                        <p><b>Description:</b> {movie.overview}</p>
+                        <p>Release date: <b>{movie.release_date?.split("-")[0]}</b></p>
                         {genres && genres.length > 0 && (
-                            <p>Genres: {getGenreNames(movie.genre_ids)}</p>)
+                            <p><b>Genres:</b> {getGenreNames(movie.genre_ids)}</p>)
+                        }
+
+                        {credits && credits.length > 0 && (
+                            <p><b>Cast:</b>
+                                {getActorNames(credits)}
+                            </p>)
                         }
 
                         <button className="btn text-success-emphasis bg-success-subtle border border-success-subtle rounded-3 " onClick={onWatchTrailer}> Watch Trailer</button>
