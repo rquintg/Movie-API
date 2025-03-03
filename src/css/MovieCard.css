@@ -168,7 +168,7 @@
 }
 
 .modal-poster img {
-    width: 60%;
+    width: 40%;
     height: auto;
     border: #1a1a1a solid 2px;
     border-radius: 8px;
@@ -186,5 +186,10 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    sc
+}
+
+
+.character-name {
+    color: #ff5722;
+    font-style: italic;
 }
