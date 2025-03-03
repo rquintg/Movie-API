@@ -22,3 +22,9 @@ export const getGenres = async () => {
     const data = await response.json();
     return data.genres;
 }
+
+export const getMovieCredits = async (movieId) => {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/movie/${movieId}/credits?api_key=${import.meta.env.VITE_API_KEY}`);
+    const data = await response.json();
+    return data.cast;
+}
