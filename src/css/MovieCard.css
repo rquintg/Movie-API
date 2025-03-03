@@ -188,8 +188,18 @@
     z-index: 1000;
 }
 
+.modal-info{
+    padding: 0.5rem;
+}
+
 
 .character-name {
     color: #ff5722;
     font-style: italic;
+}
+
+.movie-details{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
