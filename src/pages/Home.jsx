@@ -6,7 +6,7 @@ import ModalMovieCard from "../components/ModalMovieCard.jsx";
 import '../css/Home.css'
 
 
-function Home (){
+function Home() {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [movies, setMovies] = useState([]);
@@ -19,38 +19,43 @@ function Home (){
 
 
     useEffect(() => {
-        const loadPopularMovies = async () => {
+        async function fetchPopularMoviesData() {
             try {
                 const popularMovies = await getPopularMovies();
                 setMovies(popularMovies);
+                setError(null);
             } catch (error) {
                 console.error(error);
-                setError("Error loading popular movies");
-            }
-            finally {
+                setError("Error loading movies");
+            } finally {
                 setLoading(false);
             }
         }
 
-        loadPopularMovies();
+
+        if (movies) {
+            fetchPopularMoviesData();
+        }
     }, []);
+
+    if (!movies) return null;
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        if(!searchQuery.trim()) return
-        if(loading) return
+        if (!searchQuery.trim()) return
+        if (loading) return
 
         setLoading(true);
 
-        try{
+        try {
             const searchResults = await searchMovies(searchQuery);
             setMovies(searchResults);
             setError(null);
 
-        }catch (error) {
+        } catch (error) {
             console.error(error);
             setError("Error searching movies");
-        }finally {
+        } finally {
             setLoading(false);
         }
     }
@@ -131,10 +136,10 @@ function Home (){
             )}
 
             {showModalInfo && selectedMovie && (
-               <ModalMovieCard movie={selectedMovie}
-                               onWatchTrailer={() => handleWatchTrailer(selectedMovie.id)}
-                               onCloseModal={handleCloseModalInfo}
-               />
+                <ModalMovieCard movie={selectedMovie}
+                                onWatchTrailer={() => handleWatchTrailer(selectedMovie.id)}
+                                onCloseModal={handleCloseModalInfo}
+                />
             )}
 
         </div>
