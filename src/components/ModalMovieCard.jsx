@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getGenres, getMovieCredits} from "../services/api.js";
+import {getGenres, getMovieCredits, getMovieDetails} from "../services/api.js";
 
 import '../css/MovieCard.css';
 
@@ -8,6 +8,7 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
 
     const [genres, setGenres] = useState([]);
     const [credits, setCredits] = useState([]);
+    const [details, setDetails] = useState([]);
 
     useEffect(() => {
         async function fetchGenres() {
@@ -20,8 +21,14 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
             setCredits(creditsData);
         }
 
+        async function fetchDetails() {
+            const detailsData = await getMovieDetails(movie.id);
+            setDetails(detailsData);
+        }
+
         fetchGenres();
         fetchCredits();
+        fetchDetails();
     }, [movie.id]);
 
     function getGenreNames(genreIds) {
@@ -39,7 +46,11 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
         ));
     }
 
-
+    function getHoursAndMinutes(runtime) {
+        const hours = Math.floor(runtime / 60);
+        const minutes = runtime % 60;
+        return `${hours}h ${minutes}m`;
+    }
 
     return (
         <div className="modal fade show modal-overlay" >
@@ -56,22 +67,32 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
                         <div className=" modal-poster">
                             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title}/>
                         </div>
-                        <p><b>Description:</b> {movie.overview}</p>
-                        <p>Release date: <b>{movie.release_date?.split("-")[0]}</b></p>
-                        {genres && genres.length > 0 && (
-                            <p><b>Genres:</b> {getGenreNames(movie.genre_ids)}</p>)
-                        }
+                        <div className="modal-info">
+                            <p><b>Description:</b> {movie.overview}</p>
+                            <div className="movie-details">
+                                <p>Release date: <b>{movie.release_date?.split("-")[0]}</b></p>
+                                <p>Runtime: <b>{getHoursAndMinutes(details.runtime)}</b></p>
+                            </div>
+                            {genres && genres.length > 0 && (
+                                <p><b>Genres:</b> {getGenreNames(movie.genre_ids)}</p>)
+                            }
 
-                        {credits && credits.length > 0 && (
-                            <p><b>Cast:</b>
-                                {getActorNames(credits)}
-                            </p>)
-                        }
+                            {credits && credits.length > 0 && (
+                                <p><b>Cast:</b>
+                                    {getActorNames(credits)}
+                                </p>)
+                            }
 
-                        <button className="btn text-success-emphasis bg-success-subtle border border-success-subtle rounded-3 " onClick={onWatchTrailer}> Watch Trailer</button>
+                            <button
+                                className="btn text-success-emphasis bg-success-subtle border border-success-subtle rounded-3 "
+                                onClick={onWatchTrailer}> Watch Trailer
+                            </button>
+                        </div>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3" onClick={onCloseModal}>
+                        <button type="button"
+                                className="btn text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3"
+                                onClick={onCloseModal}>
                             Close
                         </button>
                     </div>
