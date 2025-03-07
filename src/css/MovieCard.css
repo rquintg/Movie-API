@@ -161,7 +161,10 @@
     border: #1a1a1a solid 1px;
 }
 .modal-poster {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding-bottom: 10px;
     border-radius: 8px;
     overflow: hidden;
@@ -173,6 +176,7 @@
     border: #1a1a1a solid 2px;
     border-radius: 8px;
     object-fit: cover;
+    margin-bottom: 3px;
 }
 
 .modal-overlay {
@@ -189,7 +193,7 @@
 }
 
 .modal-info{
-    padding: 0.5rem;
+    padding: 1rem 1rem 0.5rem 1rem;
 }
 
 
@@ -202,4 +206,19 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.container-providers{
+    margin-bottom: 5px  ;
+}
+
+.watch-providers{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-bottom: 5px;
+}
+
+.modal-body{
+padding: 1px;
 }
