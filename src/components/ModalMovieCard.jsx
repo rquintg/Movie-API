@@ -54,12 +54,19 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
         ));
     }
 
-
-
     function getHoursAndMinutes(runtime) {
         const hours = Math.floor(runtime / 60);
         const minutes = runtime % 60;
         return `${hours}h ${minutes}m`;
+    }
+
+    function formatReleaseDate(releaseDate) {
+        const date = new Date(releaseDate);
+
+        const month = date.toLocaleString('en-US',{month: 'long'});
+        const year = date.getFullYear();
+
+        return `${month} ${year}`;
     }
 
     return (
@@ -85,7 +92,7 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
                         <div className="modal-info">
                             <p><b>Description:</b> {movie.overview}</p>
                             <div className="movie-details">
-                                <p>Release date: <b>{movie.release_date?.split("-")[0]}</b></p>
+                                <p>Release: <b>{formatReleaseDate(movie.release_date)}</b></p>
                                 <p>Runtime: <b>{getHoursAndMinutes(details.runtime)}</b></p>
                             </div>
                             {genres && genres.length > 0 && (
