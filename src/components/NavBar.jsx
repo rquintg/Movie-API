@@ -4,7 +4,7 @@ import '../css/Navbar.css'
 
 function NavBar() {
   return (
-    <nav className="navbar">
+    <nav className="navbar fixed-top">
       <div className="navbar-brand">
        <img src="/logo.png" alt="Movie App Logo" style={{ height: '40px', marginRight: '10px', borderRadius: '30%' }} />
           <Link to="/">Movie App</Link>
