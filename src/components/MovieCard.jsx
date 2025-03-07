@@ -1,3 +1,5 @@
+import {useEffect, useState} from "react";
+import {getReleaseDates} from "../services/api.js";
 import {useMovieContext} from "../contexts/MovieContext.jsx";
 
 import '../css/MovieCard.css'
@@ -6,6 +8,19 @@ import '../css/MovieCard.css'
 function MovieCard({movie, onShowModalInfo}) {
     const {addFavorites, removeFromFavorites, isFavorite} = useMovieContext();
     const favorite = isFavorite(movie.id);
+
+    const [releaseDates, setReleaseDates] = useState([]);
+
+    useEffect(() => {
+
+        async function fetchReleaseDates() {
+            const releaseDatesData = await getReleaseDates(movie.id);
+            setReleaseDates(releaseDatesData);
+        }
+
+        fetchReleaseDates();
+
+    }, [movie.id]);
 
 
     function onFavoriteClick(e) {
@@ -21,6 +36,11 @@ function MovieCard({movie, onShowModalInfo}) {
         return overview;
     }
 
+    function getCertification(releaseDates) {
+        const certification = releaseDates.find(date => date.iso_3166_1 === 'US')?.release_dates[0].certification;
+        return certification ? certification : 'N/R';
+    }
+
     return (
         <div className="movie-card">
             <div className="movie-poster">
@@ -33,7 +53,7 @@ function MovieCard({movie, onShowModalInfo}) {
             </div>
             <div className="movie-info-header">
                 <h3>{movie.title}</h3>
-                <p className="rating-select">Rating: {movie.vote_average > 0 ? movie.vote_average.toFixed(1) : "n/a"}</p>
+                <p className="rating-select">Rating: {getCertification(releaseDates)}</p>
             </div>
             <div className="movie-info">
                 <p>{truncateOverview(movie.overview, 100)}</p>
