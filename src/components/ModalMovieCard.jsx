@@ -105,7 +105,7 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
                                 </p>)
                             }
 
-                            {watchProviders.buy && watchProviders.buy.length > 0 && (
+                            {watchProviders && watchProviders.buy && watchProviders.buy.length > 0 && (
                                 <div  className="container-providers">
                                     <b>Buy:</b>
                                     <div className="watch-providers">
