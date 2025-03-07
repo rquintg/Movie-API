@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getGenres, getMovieCredits, getMovieDetails} from "../services/api.js";
+import {getGenres, getMovieCredits, getMovieDetails, getWatchProviders} from "../services/api.js";
 
 import '../css/MovieCard.css';
 
@@ -9,6 +9,7 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
     const [genres, setGenres] = useState([]);
     const [credits, setCredits] = useState([]);
     const [details, setDetails] = useState([]);
+    const [watchProviders, setWatchProviders] = useState([]);
 
     useEffect(() => {
         async function fetchGenres() {
@@ -26,9 +27,16 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
             setDetails(detailsData);
         }
 
+        async function fetchWatchProviders() {
+            const watchProviders = await getWatchProviders(movie.id);
+            setWatchProviders(watchProviders);
+            console.log(watchProviders);
+        }
+
         fetchGenres();
         fetchCredits();
         fetchDetails();
+        fetchWatchProviders()
     }, [movie.id]);
 
     function getGenreNames(genreIds) {
@@ -46,6 +54,8 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
         ));
     }
 
+
+
     function getHoursAndMinutes(runtime) {
         const hours = Math.floor(runtime / 60);
         const minutes = runtime % 60;
@@ -59,13 +69,18 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
                     <div className="">
                         <h5 className="movie-info-header">
                             {movie.title}
-                            <p className="rating-select">Rating: {movie.vote_average.toFixed(1)}</p>
+                          <p className="rating-select">User Score: {movie.vote_average > 0 ? Math.round(movie.vote_average * 10) : 0}%</p>
                         </h5>
 
                     </div>
                     <div className="modal-body">
                         <div className=" modal-poster">
                             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title}/>
+                            <strong>
+                                <i className="bi bi-chevron-double-left"></i>
+                                {details.tagline}
+                                <i className="bi bi-chevron-double-right"></i>
+                            </strong>
                         </div>
                         <div className="modal-info">
                             <p><b>Description:</b> {movie.overview}</p>
@@ -82,6 +97,19 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
                                     {getActorNames(credits)}
                                 </p>)
                             }
+
+                            {watchProviders.buy && watchProviders.buy.length > 0 && (
+                                <div  className="container-providers">
+                                    <b>Buy:</b>
+                                    <div className="watch-providers">
+                                        {watchProviders.buy.map((provider, index) => (
+                                            <div key={index}>
+                                                <img src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} style={{ height: '40px', borderRadius: '30%' }} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
                             <button
                                 className="btn text-success-emphasis bg-success-subtle border border-success-subtle rounded-3 "
