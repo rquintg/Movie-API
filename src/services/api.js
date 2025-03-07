@@ -33,3 +33,15 @@ export const getMovieDetails = async (movieId) => {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/movie/${movieId}?api_key=${import.meta.env.VITE_API_KEY}`);
     return await response.json();
 }
+
+export const getReleaseDates = async (movieId) => {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/movie/${movieId}/release_dates?api_key=${import.meta.env.VITE_API_KEY}`);
+    const data = await response.json();
+    return data.results;
+}
+
+export const getWatchProviders = async (movieId) => {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/movie/${movieId}/watch/providers?api_key=${import.meta.env.VITE_API_KEY}`);
+    const data = await response.json();
+    return data.results.US;
+}
