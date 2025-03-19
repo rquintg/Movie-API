@@ -1,9 +1,12 @@
 import {useState, useEffect} from "react";
+import { driver } from "driver.js";
 import {getPopularMovies, searchMovies, getMovieTrailers} from "../services/api.js";
 import MovieCard from "../components/MovieCard.jsx";
 import ModalMovieCard from "../components/ModalMovieCard.jsx";
 
+import "driver.js/dist/driver.css";
 import '../css/Home.css'
+import '../css/DriverJS.css'
 
 
 function Home() {
@@ -32,9 +35,54 @@ function Home() {
             }
         }
 
+        const driveObj = driver({
+            showProgress: true,
+            popoverClass: "driverjs-theme",
+            steps: [
+
+                {
+                    element: '.search-input',
+                    popover: {
+                        title: 'Search Input',
+                        description: 'Type the name of the movie you want to search',
+                        side: 'bottom',
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '.search-buttom',
+                    popover: {
+                        title: 'Search Button',
+                        description: 'Click here to search for the movie',
+                        side: 'right',
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '.favorite-btn',
+                    popover: {
+                        title: 'Favorite Button',
+                        description: 'Click here to add to favorites',
+                        side: 'right',
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '.movie-info',
+                    popover: {
+                        title: 'Movie Info',
+                        description: 'Click in "show details" for more information about the movie',
+                        side: 'right',
+                        align: 'start'
+                    }
+                }
+            ]
+        })
+
 
         if (movies) {
             fetchPopularMoviesData();
+            driveObj.drive();
         }
     }, []);
 
