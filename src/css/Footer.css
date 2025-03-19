@@ -1,4 +1,4 @@
-footer {
+.footer {
     background-color: rgba(0, 0, 0, 0.2);
     padding: 20px;
     text-align: center;
@@ -8,7 +8,7 @@ footer {
     width: 100%;
 }
 
-footer p {
+.footer p {
     margin: 0;
     color: #939ba3;
     font-size: 14px;

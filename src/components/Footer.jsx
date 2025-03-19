@@ -8,7 +8,7 @@ function Footer() {
     const year = currentDate.getFullYear();
 
   return (
-    <footer>
+    <footer className="footer">
       <p>© {month} {day} of {year}</p>
     </footer>
   );
