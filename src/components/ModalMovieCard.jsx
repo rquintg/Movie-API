@@ -30,7 +30,6 @@ function ModalMovieCard ({movie, onWatchTrailer, onCloseModal}) {
         async function fetchWatchProviders() {
             const watchProviders = await getWatchProviders(movie.id);
             setWatchProviders(watchProviders);
-            console.log(watchProviders);
         }
 
         fetchGenres();

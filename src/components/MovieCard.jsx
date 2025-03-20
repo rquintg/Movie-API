@@ -37,6 +37,9 @@ function MovieCard({movie, onShowModalInfo}) {
     }
 
     function getCertification(releaseDates) {
+        if (!Array.isArray(releaseDates)) {
+            return 'N/R';
+        }
         const certification = releaseDates.find(date => date.iso_3166_1 === 'US')?.release_dates[0].certification;
         return certification ? certification : 'N/R';
     }
